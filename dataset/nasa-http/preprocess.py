@@ -12,9 +12,15 @@ class MetricType(enum.Enum):
 
 def preprocess(source_csv_path: str, output_csv_path: str, time_step: int = 60, normalize: bool = False):
     df = pd.read_csv(source_csv_path, delimiter=',')
+    df['cpu_utilization'] = 0.0
+    df['memory_utilization'] = 0.0
+    df['gpu_utilization'] = 0.0
+    df['cpu_utilization'] = df['cpu_utilization'].astype(float)
+    df['memory_utilization'] = df['memory_utilization'].astype(float)
+    df['gpu_utilization'] = df['gpu_utilization'].astype(float)
     augment_cpu_intensive_metrics(df, interval=time_step)
 
-    print()
+    print("metrics are augmented to raw dataset")
 
     if normalize:
         min_cpu_utilization = df['cpu_utilization'].min()
@@ -24,18 +30,21 @@ def preprocess(source_csv_path: str, output_csv_path: str, time_step: int = 60, 
         min_gpu_utilization = df['gpu_utilization'].min()
         max_gpu_utilization = df['gpu_utilization'].max()
 
-        df['normalized_cpu_utilization'] = df['cpu_utilization'] - min_cpu_utilization / (
+        df['normalized_cpu_utilization'] = (df['cpu_utilization'] - min_cpu_utilization) / (
                 max_cpu_utilization - min_cpu_utilization)
 
-        df['normalized_memory_utilization'] = df['memory_utilization'] - min_memory_utilization / (
+        df['normalized_memory_utilization'] = (df['memory_utilization'] - min_memory_utilization) / (
                 max_memory_utilization - min_memory_utilization)
 
-        df['normalized_gpu_utilization'] = df['gpu_utilization'] - min_gpu_utilization / (
+        df['normalized_gpu_utilization'] = (df['gpu_utilization'] - min_gpu_utilization) / (
                 max_gpu_utilization - min_gpu_utilization)
+
+        print("metrics are normalized now")
 
     print()
 
     df.to_csv(output_csv_path, sep=',', index=False)
+    print("new csv dataset generated")
 
 
 if __name__ == '__main__':
