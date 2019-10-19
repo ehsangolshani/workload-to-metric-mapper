@@ -17,9 +17,9 @@ def augment_cpu_intensive_metrics(df: pd.DataFrame, interval: int = 60):
     #                                 3 * (x + previous_cpu_utilization / 100)) + 3
     # df['memory_utilization'] = previous_memory_utilization/400 + (x - previous_x) * 50
 
-    df['cpu_utilization'] = (4 * x ** 3) - (3 * x ** 2) + (3 * x) + 3
-    df['memory_utilization'] = x * 50
-    df['gpu_utilization'] = 0.1 * x
+    df['cpu_utilization'] = (4 * x ** 3) - (3 * x ** 2) + (3 * x) + 250
+    df['memory_utilization'] = 30 + x * 50
+    df['gpu_utilization'] = 5 + 0.1 * x
 
 
 def augment_memory_intensive_metrics(df: pd.DataFrame, interval: int = 60):
