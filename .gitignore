@@ -232,3 +232,5 @@ dataset/fifa-worldcup-1998/raw/wc_day14_1
 dataset/saskatchewan-http/raw/usask_abort_log
 dataset/saskatchewan-http/raw/usask_access_log
 testiii.py
+/model*
+/final_model_*
