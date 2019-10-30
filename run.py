@@ -40,12 +40,12 @@ with autograd.detect_anomaly():
             input: torch.Tensor = data[:, 0, :]
             labels: torch.Tensor = data[:, 1, 1:]
             optimizer.zero_grad()
-            output = model(input)
+            outputs = model(input)
 
-            loss = criterion(output, labels)
-            cpu_loss = cpu_criterion(output[:, 1], labels[:, 1])
-            memory_loss = cpu_criterion(output[:, 2], labels[:, 2])
-            gpu_loss = cpu_criterion(output[:, 3], labels[:, 3])
+            loss = criterion(outputs, labels)
+            # cpu_loss = cpu_criterion(outputs[:, 0], labels[:, 0])
+            # memory_loss = cpu_criterion(outputs[:, 1], labels[:, 1])
+            # gpu_loss = cpu_criterion(outputs[:, 2], labels[:, 2])
 
             loss.backward()
             optimizer.step()
@@ -54,7 +54,7 @@ with autograd.detect_anomaly():
             if i % 1000 == 0 and i > 0:
                 print('[%d, %5d] loss: %.3f' %
                       (epoch + 1, i + 1, running_loss / 500))
-                print('real: ', str(labels), '----- got: ', str(output))
+                print('real: ', str(labels), '----- got: ', str(outputs))
                 print()
                 if (i > 3000 or epoch > 0) and i % 10000 == 0 and (loss < 1.0 or i > 20000):
                     torch.save(model.state_dict(), "model_nasa_dataset" +
@@ -80,12 +80,12 @@ sum_of_gpu_loss = 0
 for i, data in enumerate(test_data_loader, 0):
     input: torch.Tensor = data[:, 0, :]
     labels: torch.Tensor = data[:, 1, 1:]
-    output = model(input)
+    outputs = model(input)
 
-    loss = criterion(output, labels)
-    cpu_loss = cpu_criterion(output[:, 1], labels[:, 1])
-    memory_loss = cpu_criterion(output[:, 2], labels[:, 2])
-    gpu_loss = cpu_criterion(output[:, 3], labels[:, 3])
+    loss = criterion(outputs, labels)
+    cpu_loss = cpu_criterion(outputs[:, 0], labels[:, 0])
+    memory_loss = cpu_criterion(outputs[:, 1], labels[:, 1])
+    gpu_loss = cpu_criterion(outputs[:, 2], labels[:, 2])
 
     sum_of_loss += loss.item()
     sum_of_cpu_loss += cpu_loss.item()
