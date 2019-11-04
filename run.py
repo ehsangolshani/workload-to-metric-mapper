@@ -25,7 +25,8 @@ test_data_loader: data.DataLoader = data.DataLoader(dataset=test_dataset, batch_
 dropout = 0.25
 
 model: DNN = DNN()
-criterion = nn.MSELoss()
+mse_criterion = nn.MSELoss()
+mae_criterion = nn.L1Loss()
 cpu_criterion = nn.MSELoss()
 memory_criterion = nn.MSELoss()
 gpu_criterion = nn.MSELoss()
@@ -42,7 +43,8 @@ with autograd.detect_anomaly():
             optimizer.zero_grad()
             outputs = model(input)
 
-            loss = criterion(outputs, labels)
+            loss = mse_criterion(outputs, labels)
+            # loss = mse_criterion(outputs, labels)
             # cpu_loss = cpu_criterion(outputs[:, 0], labels[:, 0])
             # memory_loss = cpu_criterion(outputs[:, 1], labels[:, 1])
             # gpu_loss = cpu_criterion(outputs[:, 2], labels[:, 2])
@@ -82,7 +84,7 @@ for i, data in enumerate(test_data_loader, 0):
     labels: torch.Tensor = data[:, 1, 1:]
     outputs = model(input)
 
-    loss = criterion(outputs, labels)
+    loss = mse_criterion(outputs, labels)
     cpu_loss = cpu_criterion(outputs[:, 0], labels[:, 0])
     memory_loss = cpu_criterion(outputs[:, 1], labels[:, 1])
     gpu_loss = cpu_criterion(outputs[:, 2], labels[:, 2])
