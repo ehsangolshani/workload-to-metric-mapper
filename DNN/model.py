@@ -1,9 +1,9 @@
 from torch import nn
 
 
-class DNN(nn.Module):
+class DNNModel(nn.Module):
     def __init__(self, dropout=0.2):
-        super(DNN, self).__init__()
+        super(DNNModel, self).__init__()
         self.fc1 = nn.Linear(4, 4)
         self.relu1 = nn.ReLU()
         self.dropout1 = nn.Dropout(p=dropout)

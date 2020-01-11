@@ -49,12 +49,7 @@ def preprocess(source_csv_path: str, output_csv_path: str, time_step: int = 60, 
 
 if __name__ == '__main__':
     # time_step is in seconds
-    preprocess(source_csv_path='./raw/nasa_temporal_rps_August95_1m.csv',
-               output_csv_path='nasa_temporal_metrics_August95_1m.csv',
-               time_step=60,
-               normalize=True)
-
-    preprocess(source_csv_path='./raw/nasa_temporal_rps_July95_1m.csv',
-               output_csv_path='nasa_temporal_metrics_July95_1m.csv',
+    preprocess(source_csv_path='./raw/nasa_temporal_rps_1m.csv',
+               output_csv_path='nasa_temporal_metrics_1m.csv',
                time_step=60,
                normalize=True)

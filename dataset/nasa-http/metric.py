@@ -32,15 +32,14 @@ def augment_cpu_intensive_metrics(df: pd.DataFrame, interval: int = 60):
     previous_memory_utilization.fillna(0, inplace=True)
     previous_gpu_utilization.fillna(0, inplace=True)
 
-    x = (request_rate / interval) * 5
-    previous_x = (previous_request_rate / interval) * 5
+    x = request_rate / 8
 
     df['cpu_utilization'] = (2 * (
-            x / 7 + previous_cpu_utilization / 1100 + previous_memory_utilization / 500) ** 3) - (1 * (
-            x / 9 + previous_cpu_utilization / 1000 + previous_memory_utilization / 400) ** 2) + (
-                                    3 * (x / 2 + previous_cpu_utilization / 700)) + 700
-    df['memory_utilization'] = previous_memory_utilization / 200 + (x - previous_x) * 8 + 1000
-    df['gpu_utilization'] = 5 + 0.1 * x
+            x / 2 + previous_cpu_utilization / 900 + previous_memory_utilization / 400) ** 3) - (1 * (
+            x / 3 + previous_cpu_utilization / 700 + previous_memory_utilization / 300) ** 2) + (
+                                    3 * (x / 2 + previous_cpu_utilization / 700)) + 50
+    df['memory_utilization'] = (x / 5) ** 4 + (previous_memory_utilization / 100 + x * 5) + 100
+    df['gpu_utilization'] = 50 + 0.6 * x
 
 
 def augment_memory_intensive_metrics(df: pd.DataFrame, interval: int = 60):
